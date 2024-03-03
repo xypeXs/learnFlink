@@ -12,7 +12,7 @@ public class InvestGeneratorFactory {
         investGeneratorMap = new HashMap<>();
     }
 
-    public synchronized InvestGenerator getGenerator(String assetCode, BigDecimal initPrice, BigDecimal priceAmplitude) {
+    public synchronized InvestGenerator getOrCreateGenerator(String assetCode, BigDecimal initPrice, BigDecimal priceAmplitude) {
         if (!investGeneratorMap.containsKey(assetCode)) {
             InvestGenerator newInvestGenerator = InvestGenerator.builder()
                     .assetCode(assetCode)
@@ -21,6 +21,10 @@ public class InvestGeneratorFactory {
                     .build();
             investGeneratorMap.put(assetCode, newInvestGenerator);
         }
+        return investGeneratorMap.get(assetCode);
+    }
+
+    public InvestGenerator getGenerator(String assetCode) {
         return investGeneratorMap.get(assetCode);
     }
 }

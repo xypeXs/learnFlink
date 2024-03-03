@@ -1,4 +1,4 @@
-package ru.learn.flink.data;
+package ru.learn.flink.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

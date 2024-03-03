@@ -1,15 +1,18 @@
 package ru.learn.flink.controller;
 
-import jakarta.ws.rs.GET;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import ru.learn.flink.dto.InvestGeneratorCreateRequestDto;
+import ru.learn.flink.service.InvestGeneratorService;
 
-
+@Path("/invest")
 public class InvestGeneratorControllerImpl implements InvestGeneratorController {
 
+    @Inject
+    InvestGeneratorService investGeneratorService;
+
     @Override
-    public String hello() {
-        return "Hello RESTEasy";
+    public InvestGeneratorCreateRequestDto register(InvestGeneratorCreateRequestDto requestDto) {
+        return investGeneratorService.register(requestDto);
     }
 }

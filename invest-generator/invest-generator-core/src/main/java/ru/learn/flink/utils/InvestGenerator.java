@@ -1,9 +1,10 @@
 package ru.learn.flink.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import ru.learn.flink.data.InvestData;
+import ru.learn.flink.dto.InvestData;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +35,10 @@ public class InvestGenerator {
     private InvestData generateInvestData() {
         BigDecimal factor = getNormalizedPriceFactor();
         BigDecimal delta = priceAmplitude.multiply(factor);
-        BigDecimal newPrice = prevInvestData.getPrice().add(delta);
+        BigDecimal newPrice = prevInvestData.getPrice()
+                .add(delta)
+                .max(BigDecimal.ZERO)
+                .setScale(2, RoundingMode.HALF_UP);
 
         InvestData newInvestData = new InvestData(this.assetCode, newPrice, LocalDateTime.now());
         prevInvestData = newInvestData;
@@ -43,11 +47,11 @@ public class InvestGenerator {
     }
 
     private BigDecimal getNormalizedPriceFactor() {
-        double factor = ThreadLocalRandom.current().nextDouble(3.0d) - 1.0d;
-        double normalizedFactor = factor - factorSum / factorArr.length;
+        double factor = ThreadLocalRandom.current().nextDouble(1.9d) - 0.9d;
+        double normalizedFactor = (factor - 2 * factorSum / factorArr.length) / 3;
 
         factorArrCurInd = (factorArrCurInd + 1) % factorArr.length;
-        factorSum -= factorArr[factorArrCurInd];
+        factorSum -= factorArr[factorArrCurInd] - normalizedFactor;
         factorArr[factorArrCurInd] = normalizedFactor;
 
         return BigDecimal.valueOf(normalizedFactor);
