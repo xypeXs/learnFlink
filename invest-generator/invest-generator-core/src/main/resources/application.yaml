@@ -1,0 +1,13 @@
+quarkus:
+  http:
+    port: 8080
+    root-path: /data-generator
+
+kafka:
+  bootstrap:
+    servers: kafka:9002
+
+mp:
+  messaging:
+    outgoing:
+      invest_data
