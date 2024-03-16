@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres_container/INVEST
+    username: admin
+    password: admin
+  liquibase:
+    change-log: classpath:changelog/changelog-master.yml

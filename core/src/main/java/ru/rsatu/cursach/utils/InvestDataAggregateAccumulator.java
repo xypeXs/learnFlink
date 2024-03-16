@@ -5,6 +5,7 @@ import ru.learn.flink.dto.InvestData;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 @Getter
 public class InvestDataAggregateAccumulator {
@@ -22,7 +23,10 @@ public class InvestDataAggregateAccumulator {
     public InvestDataAggregateAccumulator accept(InvestData investData) {
         this.setMaxPrice(investData.getPrice());
         this.setMinPrice(investData.getPrice());
+        this.setMaxTimestamp(investData.getTimestamp());
+        this.setMinTimestamp(investData.getTimestamp());
         this.setAvgPrice(investData.getPrice());
+        this.setAssetCode(investData.getAssetCode());
         return this;
     }
 
@@ -41,15 +45,29 @@ public class InvestDataAggregateAccumulator {
     }
 
     public void setMaxPrice(BigDecimal price) {
-        if (aggregatedData.getMaxPrice().compareTo(BigDecimal.ZERO) > 0)
-            return;
-        aggregatedData.setMaxPrice(price);
+        BigDecimal maxValue = aggregatedData.getMaxPrice().max(price);
+        aggregatedData.setMaxPrice(maxValue);
     }
 
     public void setMinPrice(BigDecimal price) {
-        if (aggregatedData.getMinPrice().compareTo(BigDecimal.ZERO) > 0)
-            return;
-        aggregatedData.setMinPrice(price);
+        BigDecimal minPrice = aggregatedData.getMinPrice().min(price);
+        if (aggregatedData.getMinPrice().compareTo(BigDecimal.ZERO) < 0)
+            minPrice = price;
+        aggregatedData.setMinPrice(minPrice);
+    }
+
+    public void setMaxTimestamp(LocalDateTime ts) {
+        LocalDateTime maxTS = aggregatedData.getMaxTimestamp().isBefore(ts) ? ts : aggregatedData.getMaxTimestamp();
+        aggregatedData.setMaxTimestamp(maxTS);
+    }
+
+    public void setMinTimestamp(LocalDateTime ts) {
+        LocalDateTime minTS = aggregatedData.getMinTimestamp().isAfter(ts) ? ts : aggregatedData.getMinTimestamp();
+        aggregatedData.setMinTimestamp(minTS);
+    }
+
+    public void setAssetCode(String assetCode) {
+        aggregatedData.setAssetCode(assetCode);
     }
 
     public void setAvgPrice(BigDecimal price) {

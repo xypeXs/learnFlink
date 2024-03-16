@@ -14,17 +14,16 @@ public abstract class AbstractDBSinkFunction<T> implements SinkFunction<T> {
         sessionFactory = SessionFactoryUtils.getSessionFactory();
     }
 
-    public void saveOrUpdate(String sql) {
+    @Override
+    public void invoke(T value, Context context) throws Exception {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Query<?> query = session.createQuery(sql);
-        query.executeUpdate();
+        processSql(value, session);
 
         transaction.commit();
         session.close();
     }
 
-    @Override
-    public abstract void invoke(T value, Context context) throws Exception;
+    public abstract void processSql(T value, Session session);
 }

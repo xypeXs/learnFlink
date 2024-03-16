@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="connection.url"> jdbc:postgresql://postgres_container/INVEST</property>
+        <property name="connection.username">admin</property>
+        <property name="connection.password">admin</property>
+
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="cache.use_query_cache">false</property>
+        <property name="cache.use_second_level_cache">false</property>
+        <property name="hibernate.order_updates">true</property>
+        <property name="hibernate.order_inserts">true</property>
+        <property name="hibernate.id.new_generator_mappings">true</property>
+        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+        <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+        <!-- Maximum waiting time for a connection from the pool -->
+        <property name="hibernate.hikari.connectionTimeout">10000</property>
+        <!-- Minimum number of ideal connections in the pool -->
+        <property name="hibernate.hikari.minimumIdle">1</property>
+        <!-- Maximum number of actual connection in the pool -->
+        <property name="hibernate.hikari.maximumPoolSize">4</property>
+        <!-- Maximum time that a connection is allowed to sit ideal in the pool -->
+        <property name="hibernate.hikari.idleTimeout">180000</property>
+        <property name="hibernate.hikari.keepaliveTime">120000</property>
+        <property name="hibernate.hikari.leakDetectionThreshold">30000</property>
+
+    </session-factory>
+</hibernate-configuration>

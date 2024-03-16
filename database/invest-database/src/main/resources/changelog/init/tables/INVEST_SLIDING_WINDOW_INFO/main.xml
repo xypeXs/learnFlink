@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create-table-INVEST_SLIDING_WINDOW_INFO" author="gananyev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="INVEST_SLIDING_WINDOW_INFO"/>
+            </not>
+        </preConditions>
+        <createTable tableName="INVEST_SLIDING_WINDOW_INFO">
+            <column name="INVEST_SLIDING_WINDOW_INFO_ID" type="VARCHAR(64)" remarks="Идентификатор записи о статистике (первичный ключ)">
+                <constraints primaryKey="true"
+                             primaryKeyName="PK_INVEST_SLIDING_WINDOW_INFO_ID"/>
+            </column>
+            <column name="ASSET_CODE" type="VARCHAR(500)" remarks="Код актива"/>
+            <column name="MIN_PRICE" type="NUMERIC(19,2)" remarks="Минимальная цена"/>
+            <column name="MAX_PRICE" type="NUMERIC(19,2)" remarks="Максимальная цена"/>
+            <column name="AVG_PRICE" type="NUMERIC(19,2)" remarks="Средняя цена"/>
+            <column name="ASSETS_COUNT" type="NUMERIC(19)" remarks="Количество активов в окне"/>
+            <column name="WINDOW_SIZE_MILLIS" type="NUMERIC(19)" remarks="Размер окна (в миллисекундах)"/>
+            <column name="MIN_EVENT_TIMESTAMP" type="TIMESTAMP" remarks="Минимальное время события в окне"/>
+            <column name="MAX_EVENT_TIMESTAMP" type="TIMESTAMP" remarks="Максимальное время события в окне"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

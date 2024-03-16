@@ -20,15 +20,16 @@ public class App {
                 .keyBy(InvestData::getAssetCode)
                 .window(SlidingEventTimeWindows.of(Time.seconds(60), Time.seconds(5)))
                 .aggregate(new InvestAggregateFunction())
-                .addSink(new InvestAggregatedDataDBSinkFunction());
+                .addSink(new InvestAggregatedDataDBSinkFunction(60000L));
     }
 
     public static KafkaSource<InvestData> dataSource() {
-        KafkaSource<InvestData> investData = KafkaSource.<InvestData>builder()
+        KafkaSource<InvestData> investDataSource = KafkaSource.<InvestData>builder()
                 .setBootstrapServers("kafka:9092")
                 .setTopics("invest_data")
                 .setGroupId("invest_data_stream_processor")
                 .setStartingOffsets(OffsetsInitializer.committedOffsets())
                 .build();
+        return investDataSource;
     }
 }
