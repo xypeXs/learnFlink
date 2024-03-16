@@ -1,10 +1,11 @@
-package ru.rsatu.cursach.utils;
+package ru.learn.flink.utils;
 
 import lombok.Getter;
 import ru.learn.flink.dto.InvestData;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Getter
@@ -39,7 +40,15 @@ public class InvestDataAggregateAccumulator {
         mergedInvestAggregatedData.setMaxPrice(aggregatedData.getMaxPrice().max(aggregatedData2.getMaxPrice()));
         mergedInvestAggregatedData.setMinPrice(aggregatedData.getMinPrice().min(aggregatedData2.getMinPrice()));
         mergedInvestAggregatedData.setCounter(counterSum);
-        mergedInvestAggregatedData.setAvgPrice(aggregatedData.getAvgPrice().add(aggregatedData2.getAvgPrice()).divide(new BigDecimal(counterSum)));
+        mergedInvestAggregatedData.setAvgPrice(aggregatedData.getAvgPrice().add(aggregatedData2.getAvgPrice()).divide(new BigDecimal(counterSum), 2, RoundingMode.FLOOR));
+        mergedInvestAggregatedData.setAssetCode(aggregatedData.getAssetCode());
+
+        LocalDateTime minTS = aggregatedData.getMinTimestamp().isBefore(aggregatedData2.getMinTimestamp()) ?
+                aggregatedData.getMinTimestamp() : aggregatedData2.getMinTimestamp();
+        LocalDateTime maxTS = aggregatedData.getMaxTimestamp().isAfter(aggregatedData2.getMaxTimestamp()) ?
+                aggregatedData.getMaxTimestamp() : aggregatedData2.getMaxTimestamp();
+        mergedInvestAggregatedData.setMinTimestamp(minTS);
+        mergedInvestAggregatedData.setMaxTimestamp(maxTS);
 
         return new InvestDataAggregateAccumulator(mergedInvestAggregatedData);
     }
@@ -51,7 +60,7 @@ public class InvestDataAggregateAccumulator {
 
     public void setMinPrice(BigDecimal price) {
         BigDecimal minPrice = aggregatedData.getMinPrice().min(price);
-        if (aggregatedData.getMinPrice().compareTo(BigDecimal.ZERO) < 0)
+        if (aggregatedData.getMinPrice().compareTo(BigDecimal.ZERO) == 0)
             minPrice = price;
         aggregatedData.setMinPrice(minPrice);
     }
@@ -74,7 +83,7 @@ public class InvestDataAggregateAccumulator {
         BigDecimal oldAvgPrice = aggregatedData.getAvgPrice();
         BigDecimal oldDecimalCounter = new BigDecimal(aggregatedData.getCounter());
 
-        BigDecimal newAvgPrice = oldAvgPrice.multiply(oldDecimalCounter).add(price).divide(oldDecimalCounter.add(BigDecimal.ONE));
+        BigDecimal newAvgPrice = oldAvgPrice.multiply(oldDecimalCounter).add(price).divide(oldDecimalCounter.add(BigDecimal.ONE), 2, RoundingMode.FLOOR);
         BigInteger newCounter = aggregatedData.getCounter().add(BigInteger.ONE);
 
         aggregatedData.setAvgPrice(newAvgPrice);

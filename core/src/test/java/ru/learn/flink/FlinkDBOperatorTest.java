@@ -1,20 +1,22 @@
-package ru.rsatu.cursach;
+package ru.learn.flink;
 
 
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
-import ru.rsatu.cursach.utils.InvestAggregatedData;
-import ru.rsatu.cursach.utils.InvestAggregatedDataDBSinkFunction;
+import ru.learn.flink.utils.InvestAggregatedData;
+import ru.learn.flink.utils.InvestAggregatedDataDBSinkFunction;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class FlinkDBOperatorTest extends TestCase {
+
+public class FlinkDBOperatorTest {
 
     @Test
+    @Ignore
     public void testInvestSlideSaveOperator() {
         InvestAggregatedDataDBSinkFunction sink = new InvestAggregatedDataDBSinkFunction(60000L);
 

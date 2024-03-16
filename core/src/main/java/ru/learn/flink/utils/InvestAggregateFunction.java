@@ -1,4 +1,4 @@
-package ru.rsatu.cursach.utils;
+package ru.learn.flink.utils;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import ru.learn.flink.dto.InvestData;

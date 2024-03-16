@@ -1,7 +1,9 @@
-package ru.rsatu.cursach.utils;
+package ru.learn.flink.utils;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 public class SessionFactoryUtils {
 
@@ -10,7 +12,8 @@ public class SessionFactoryUtils {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration().configure();
-            sessionFactory = configuration.buildSessionFactory();
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         }
         return sessionFactory;
     }

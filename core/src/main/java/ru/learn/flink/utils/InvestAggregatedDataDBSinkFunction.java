@@ -1,4 +1,4 @@
-package ru.rsatu.cursach.utils;
+package ru.learn.flink.utils;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;

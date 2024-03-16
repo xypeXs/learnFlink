@@ -1,4 +1,4 @@
-package ru.rsatu.cursach;
+package ru.learn.flink;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
