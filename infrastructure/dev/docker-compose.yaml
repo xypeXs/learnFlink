@@ -47,6 +47,20 @@ services:
       - "9082:8080"
     environment:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9002
+  db:
+    image: postgres:16.2
+    container_name: postgres_container
+    hostname: postgres
+    networks:
+      - learn-flink
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=INVEST
+    volumes:
+      - ./data/postgres_data:/var/lib/postgresql/data
   invest_generator:
     image: investgenerator:latest
     container_name: invest_generator
